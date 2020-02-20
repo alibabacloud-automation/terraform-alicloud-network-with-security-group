@@ -16,11 +16,6 @@ output "this_vpc_tags" {
   value       = module.vpc.this_vpc_tags
 }
 
-output "this_availability_zones" {
-  description = "List of availability zones in which vswitches launched."
-  value       = module.vpc.this_availability_zones
-}
-
 output "this_vpc_cidr_block" {
   description = "The VPC cidr block."
   value       = module.vpc.this_vpc_cidr_block
@@ -34,19 +29,24 @@ output "this_vswitch_ids" {
   value       = module.vpc.this_vswitch_ids
 }
 
-output "this_vswitch_name" {
-  description = "The name of vswitch."
-  value       = module.vpc.this_vswitch_name
+output "this_availability_zones" {
+  description = "List of availability zones in which vswitches launched."
+  value       = module.vpc.this_availability_zones
+}
+
+output "this_vswitch_names" {
+  description = "List names of vswitch."
+  value       = module.vpc.this_vswitch_names
 }
 
 output "this_vswitch_tags" {
-  description = "List of IDs of vswitch."
+  description = "List tags of vswitch."
   value       = module.vpc.this_vswitch_tags
 }
 
-output "this_vswitch_cidr_block" {
-  description = "The vswitch cidr block."
-  value       = var.vswitch_cidrs
+output "this_vswitch_cidr_blocks" {
+  description = "List cidr blocks of vswitch."
+  value       = module.vpc.this_vswitch_cidr_blocks
 }
 
 #################
