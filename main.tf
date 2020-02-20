@@ -7,11 +7,11 @@ provider "alicloud" {
 }
 
 locals {
-  create_vpc = var.existing_vpc_id != "" ? var.use_existing_vpc : var.create_vpc
+  create_vpc = var.use_existing_vpc ? false : var.create_vpc
 }
 
 module "vpc" {
-  source          = "alibaba/vpc/alicloud"
+  source          = "../terraform-alicloud-vpc"
   region          = var.region
   vpc_id          = var.existing_vpc_id
   create          = local.create_vpc

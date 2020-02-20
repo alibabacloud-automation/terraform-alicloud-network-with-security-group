@@ -39,13 +39,13 @@ output "this_availability_zones" {
 }
 
 output "this_vswitch_name" {
-  description = "The name of vswitch."
-  value       = module.vpc-security-group.this_vswitch_name
+  description = "List names of vswitch."
+  value       = module.vpc-security-group.this_vswitch_names
 }
 
 output "this_vswitch_cidr_block" {
-  description = "The vswitch cidr block."
-  value       = module.vpc-security-group.this_vswitch_cidr_block
+  description = "List cidr blocks of vswitch."
+  value       = module.vpc-security-group.this_vswitch_cidr_blocks
 }
 
 #################
