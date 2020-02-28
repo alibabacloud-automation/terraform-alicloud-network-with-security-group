@@ -11,7 +11,7 @@ locals {
 }
 
 module "vpc" {
-  source          = "../terraform-alicloud-vpc"
+  source          = "alibaba/vpc/alicloud"
   region          = var.region
   vpc_id          = var.existing_vpc_id
   create          = local.create_vpc

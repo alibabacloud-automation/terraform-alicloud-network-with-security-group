@@ -2,14 +2,20 @@ variable "region" {
   default = "cn-hangzhou"
 }
 
+variable "profile" {
+  default = "default"
+}
+
 provider "alicloud" {
-  region = var.region
+  region  = var.region
+  profile = var.profile
 }
 
 
 module "vpc-security-group" {
   source     = "../.."
   region     = var.region
+  profile    = var.profile
   create_vpc = true
   vpc_name   = "my-env-vpc"
   vpc_cidr   = "10.10.0.0/16"
