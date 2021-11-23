@@ -13,10 +13,6 @@ These types of resources are supported:
 * [ECS-VPC Security Group](https://www.terraform.io/docs/providers/alicloud/r/security_group.html)
 * [ECS-VPC Security Group Rule](https://www.terraform.io/docs/providers/alicloud/r/security_group_rule.html)
 
-## Terraform versions
-
-The Module requires Terraform 0.12 and Terraform Provider AliCloud 1.56.0+.
-
 ## Usage
 
 Create both VPC and Security group.
@@ -24,8 +20,6 @@ Create both VPC and Security group.
 ```hcl
 module "vpc-security-group" {
   source       = "terraform-alicloud-modules/network-with-security-group/alicloud"
-  region       = "cn-hangzhou"
-  profile      = "Your-Profile-Name"
   create_vpc   = true
   vpc_name     = "my-env-vpc"
   vpc_cidr     = "10.10.0.0/16"
@@ -58,8 +52,76 @@ module "vpc-security-group" {
 * [complete](https://github.com/terraform-alicloud-modules/terraform-alicloud-network-with-security-group/tree/master/examples/complete)
 
 ## Notes
-* This module using AccessKey and SecretKey are from `profile` and `shared_credentials_file`.
-If you have not set them yet, please install [aliyun-cli](https://github.com/aliyun/aliyun-cli#installation) and configure it.
+From the version v1.2.0, the module has removed the following `provider` setting:
+
+```hcl
+provider "alicloud" {
+  profile                 = var.profile != "" ? var.profile : null
+  shared_credentials_file = var.shared_credentials_file != "" ? var.shared_credentials_file : null
+  region                  = var.region != "" ? var.region : null
+  skip_region_validation  = var.skip_region_validation
+  configuration_source    = "terraform-alicloud-modules/network-with-security-group"
+}
+```
+
+If you still want to use the `provider` setting to apply this module, you can specify a supported version, like 1.1.0:
+
+```hcl
+module "vpc-security-group" {
+  source     = "terraform-alicloud-modules/network-with-security-group/alicloud"
+  version    = "1.1.0"
+  region     = "cn-hangzhou"
+  profile    = "Your-Profile-Name"
+  create_vpc = true
+  vpc_name   = "my-env-vpc"
+  // ...
+}
+```
+
+If you want to upgrade the module to 1.2.0 or higher in-place, you can define a provider which same region with
+previous region:
+
+```hcl
+provider "alicloud" {
+  region  = "cn-hangzhou"
+  profile = "Your-Profile-Name"
+}
+module "vpc-security-group" {
+  source     = "terraform-alicloud-modules/network-with-security-group/alicloud"
+  create_vpc = true
+  vpc_name   = "my-env-vpc"
+  // ...
+}
+```
+or specify an alias provider with a defined region to the module using `providers`:
+
+```hcl
+provider "alicloud" {
+  region  = "cn-hangzhou"
+  profile = "Your-Profile-Name"
+  alias   = "hz"
+}
+module "cdn" {
+  source     = "terraform-alicloud-modules/network-with-security-group/alicloud"
+  providers  = {
+    alicloud = alicloud.hz
+  }
+  create_vpc = true
+  vpc_name   = "my-env-vpc"
+  // ...
+}
+```
+
+and then run `terraform init` and `terraform apply` to make the defined provider effect to the existing module state.
+
+More details see [How to use provider in the module](https://www.terraform.io/docs/language/modules/develop/providers.html#passing-providers-explicitly)
+
+## Terraform versions
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.12.0 |
+| <a name="requirement_alicloud"></a> [alicloud](#requirement\_alicloud) | >= 1.56.0 |
 
 Submit Issues
 -------------
@@ -69,7 +131,7 @@ If you have any problems when using this module, please opening a [provider issu
 
 Authors
 -------
-Created and maintained by Zhou qilin(z17810666992@163.com), He Guimin(@xiaozhu36, heguimin36@163.com).
+Created and maintained by Alibaba Cloud Terraform Team(terraform@alibabacloud.com)
 
 License
 ----
