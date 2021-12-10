@@ -1,4 +1,10 @@
-## 1.2.0 (Unreleased)
+## 1.3.0 (Unreleased)
+## 1.2.0 (December 10, 2021)
+
+ENHANCEMENTS:
+
+- Removes the provider setting and improves the Readme [GH-5](https://github.com/terraform-alicloud-modules/terraform-alicloud-network-with-security-group/pull/5)
+
 ## 1.1.0 (May 28, 2020)
 
 IMPROVEMENTS:
