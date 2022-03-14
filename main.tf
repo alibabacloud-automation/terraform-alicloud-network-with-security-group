@@ -3,10 +3,10 @@ locals {
 }
 
 module "vpc" {
-  source          = "alibaba/vpc/alicloud"
-  region          = var.region
-  vpc_id          = var.existing_vpc_id
+  source = "alibaba/vpc/alicloud"
+
   create          = local.create_vpc
+  vpc_id          = var.existing_vpc_id
   vpc_name        = var.vpc_name
   vpc_cidr        = var.vpc_cidr
   vpc_description = var.vpc_description
@@ -14,16 +14,17 @@ module "vpc" {
 
   vswitch_cidrs       = var.vswitch_cidrs
   availability_zones  = var.availability_zones
-  use_num_suffix      = var.use_num_suffix
   vswitch_name        = var.vswitch_name
+  use_num_suffix      = var.use_num_suffix
   vswitch_description = var.vswitch_description
   vswitch_tags        = var.vswitch_tags
+
 }
 
 module "security_group" {
   source = "alibaba/security-group/alicloud"
+
   # alicloud_security_group
-  region      = var.region
   create      = var.create_security_group
   name        = var.name
   vpc_id      = module.vpc.vpc_id
@@ -40,8 +41,8 @@ module "security_group" {
   ingress_with_cidr_blocks = var.ingress_with_cidr_blocks
 
   # Ingress - Using a list of ports
-  ingress_with_cidr_blocks_and_ports = var.ingress_with_cidr_blocks_and_ports
   ingress_ports                      = var.ingress_ports
+  ingress_with_cidr_blocks_and_ports = var.ingress_with_cidr_blocks_and_ports
 
   # Ingress - Maps of rules and each item with source_security_group_id
   ingress_with_source_security_group_id = var.ingress_with_source_security_group_id
@@ -61,5 +62,5 @@ module "security_group" {
 
   # Egress - Maps of rules and each item with source_security_group_id
   egress_with_source_security_group_id = var.egress_with_source_security_group_id
-}
 
+}

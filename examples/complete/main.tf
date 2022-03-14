@@ -1,44 +1,137 @@
-variable "region" {
-  default = "cn-hangzhou"
+data "alicloud_zones" "default" {
 }
 
-variable "profile" {
-  default = "default"
+data "alicloud_vpcs" "default" {
+  name_regex = "default-NODELETING"
 }
 
-provider "alicloud" {
-  region  = var.region
-  profile = var.profile
+data "alicloud_security_groups" "default" {
+  vpc_id = data.alicloud_vpcs.default.ids.0
 }
 
+module "vpc_security_group" {
+  source = "../.."
 
-module "vpc-security-group" {
-  source     = "../.."
-  region     = var.region
-  profile    = var.profile
-  create_vpc = true
-  vpc_name   = "my-env-vpc"
-  vpc_cidr   = "10.10.0.0/16"
+  # VPC
+  create_vpc       = true
+  use_existing_vpc = false
 
-  availability_zones = ["cn-hangzhou-e", "cn-hangzhou-f", "cn-hangzhou-g"]
-  vswitch_cidrs      = ["10.10.1.0/24", "10.10.2.0/24", "10.10.3.0/24"]
+  vpc_name        = var.vpc_name
+  vpc_cidr        = "172.16.0.0/16"
+  vpc_description = var.vpc_description
+  vpc_tags        = var.vpc_tags
 
-  vpc_tags = {
-    Owner       = "user"
-    Environment = "staging"
-    Name        = "complete"
-  }
-
-  vswitch_tags = {
-    Project  = "Secret"
-    Endpoint = "true"
-  }
+  # Vswitch
+  vswitch_cidrs       = ["172.16.0.0/21"]
+  availability_zones  = data.alicloud_zones.default.ids
+  vswitch_name        = var.vswitch_name
+  use_num_suffix      = false
+  vswitch_description = var.vswitch_description
+  vswitch_tags        = var.vswitch_tags
 
   # security group
   create_security_group = true
-  name                  = "main-sg"
-  description           = "Security group which is used as an argument in complete-sg"
-  ingress_cidr_blocks   = ["10.10.0.0/16"]
-  ingress_rules         = ["https-443-tcp"]
-}
 
+  name                = var.name
+  description         = "tf-testacc-sg-description"
+  security_group_tags = var.security_group_tags
+
+  # alicloud_security_group_rule
+  ingress_rules              = ["https-443-tcp"]
+  ingress_cidr_blocks        = ["10.10.0.0/16"]
+  priority_for_ingress_rules = 1
+  default_ingress_priority   = 50
+
+  ingress_with_cidr_blocks = [
+    {
+      cidr_blocks = "10.10.0.0/20"
+      priority    = 1
+      rule        = "dns-udp"
+    },
+    {
+      priority    = 2
+      from_port   = 53
+      to_port     = 53
+      protocol    = "tcp"
+      description = var.rule_description
+    }
+  ]
+  ingress_ports = [50]
+  ingress_with_cidr_blocks_and_ports = [
+    {
+      cidr_blocks = "10.11.0.0/20"
+      priority    = 1
+      ports       = "10"
+      protocol    = "tcp"
+    },
+    {
+      cidr_blocks = "172.10.0.0/20"
+      protocol    = "udp"
+      description = var.rule_description
+    }
+  ]
+  ingress_with_source_security_group_id = [
+    {
+      source_security_group_id = data.alicloud_security_groups.default.ids.0
+      priority                 = 1
+      rule                     = "mysql-tcp"
+    },
+    {
+      source_security_group_id = data.alicloud_security_groups.default.ids.1
+      priority                 = 2
+      from_port                = 10
+      to_port                  = 10
+      protocol                 = "tcp"
+      description              = var.rule_description
+    },
+  ]
+
+  egress_rules              = ["http-80-tcp"]
+  egress_cidr_blocks        = ["10.10.0.0/16"]
+  priority_for_egress_rules = 1
+  default_egress_priority   = 50
+  egress_with_cidr_blocks = [
+    {
+      cidr_blocks = "10.10.0.0/20"
+      priority    = 1
+      rule        = "ipsec-500-udp"
+    },
+    {
+      priority    = 2
+      from_port   = 10
+      to_port     = 20
+      protocol    = "udp"
+      description = var.rule_description
+    }
+  ]
+  egress_ports = [90]
+  egress_with_cidr_blocks_and_ports = [
+    {
+      cidr_blocks = "10.10.0.0/20"
+      priority    = 1
+      ports       = "50"
+      protocol    = "tcp"
+    },
+    {
+      cidr_blocks = "172.10.0.0/20"
+      protocol    = "udp"
+      description = var.rule_description
+    }
+  ]
+  egress_with_source_security_group_id = [
+    {
+      source_security_group_id = data.alicloud_security_groups.default.ids.0
+      priority                 = 1
+      rule                     = "mysql-tcp"
+    },
+    {
+      source_security_group_id = data.alicloud_security_groups.default.ids.1
+      priority                 = 2
+      from_port                = 10
+      to_port                  = 10
+      protocol                 = "tcp"
+      description              = var.rule_description
+    }
+  ]
+
+}
