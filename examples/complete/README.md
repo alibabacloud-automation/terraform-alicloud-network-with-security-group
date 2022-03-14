@@ -1,9 +1,8 @@
-# Complete network-with-security-group example
+# Complete
 
-Configuration in this directory Create both VPC and Security group.
+Configuration in this directory Creates both VPC and Security group.
 
-
-# Usage
+## Usage
 
 To run this example you need to execute:
 
@@ -13,21 +12,21 @@ $ terraform plan
 $ terraform apply
 ```
 
-Run `terraform destroy` when you don't need these resources.
+Note that this example may create resources which cost money. Run `terraform destroy` when you don't need these resources.
+
+This example provides the tf variables file in the folder `tfvars`. If you want to create or update this example,
+you can run this example as the following commands:
+```bash
+$ terraform plan -var-file=tfvars/01-update.tfvars
+$ terraform apply -var-file=tfvars/01-update.tfvars
+```
+
+Also, you can add more variables files in the folder `tfvars`.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+## Requirements
 
-## Outputs
-| Name | Description |
-|------|-------------|
-| this_vpc_id | The ID of the VPC |
-| this_vpc_tags | The tags of the VPC |
-| this_vswitch_ids | List of IDs of vswitch |
-| this_vswitch_tags | List of IDs of vswitch |
-| this_security_group_id | The ID of the security group |
-| this_security_group_vpc_id |The VPC ID |
-| this_security_group_name | The name of the security group |
-| this_security_group_description | The description of the security group |
-
-
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13.0 |
+| <a name="requirement_alicloud"></a> [alicloud](#requirement\_alicloud) | >= 1.56.0 |

@@ -9,6 +9,7 @@ variable "profile" {
   type        = string
   default     = ""
 }
+
 variable "shared_credentials_file" {
   description = "(Deprecated from version 1.2.0) This is the path to the shared credentials file. If this is not set and a profile is specified, $HOME/.aliyun/config.json will be used."
   type        = string
@@ -30,34 +31,34 @@ variable "create_vpc" {
   default     = true
 }
 
-variable "existing_vpc_id" {
-  description = "The vpc id used to launch several vswitches."
-  type        = string
-  default     = ""
-}
-
 variable "use_existing_vpc" {
   description = "The vpc id used to launch several vswitches. If set, the 'create_vpc' will be ignored."
   type        = bool
   default     = true
 }
 
+variable "existing_vpc_id" {
+  description = "The vpc id used to launch several vswitches."
+  type        = string
+  default     = ""
+}
+
 variable "vpc_name" {
   description = "The vpc name used to launch a new vpc."
   type        = string
-  default     = "TF-VPC"
-}
-
-variable "vpc_description" {
-  description = "The vpc description used to launch a new vpc."
-  type        = string
-  default     = "A new VPC created by Terrafrom module terraform-alicloud-vpc"
+  default     = ""
 }
 
 variable "vpc_cidr" {
   description = "The cidr block used to launch a new vpc."
   type        = string
-  default     = "172.16.0.0/12"
+  default     = ""
+}
+
+variable "vpc_description" {
+  description = "The vpc description used to launch a new vpc."
+  type        = string
+  default     = ""
 }
 
 variable "vpc_tags" {
@@ -83,7 +84,8 @@ variable "availability_zones" {
 
 variable "vswitch_name" {
   description = "The vswitch name prefix used to launch several new vswitches."
-  default     = "TF-VSwitch"
+  type        = string
+  default     = ""
 }
 
 variable "use_num_suffix" {
@@ -95,7 +97,7 @@ variable "use_num_suffix" {
 variable "vswitch_description" {
   description = "The vswitch description used to launch several new vswitch."
   type        = string
-  default     = "New VSwitch created by Terrafrom module terraform-alicloud-vpc."
+  default     = ""
 }
 
 variable "vswitch_tags" {
@@ -122,7 +124,7 @@ variable "name" {
 variable "description" {
   description = "Description of security group."
   type        = string
-  default     = "Security Group managed by Terraform"
+  default     = ""
 }
 
 variable "security_group_tags" {
@@ -140,19 +142,26 @@ variable "ingress_rules" {
   default     = []
 }
 
+variable "ingress_cidr_blocks" {
+  description = "The IPv4 CIDR ranges list to use on ingress cidrs rules."
+  type        = list(string)
+  default     = []
+}
+
 variable "priority_for_ingress_rules" {
   description = "A priority is used when setting 'ingress_rules'. Default to 'default_ingress_priority'."
   type        = number
   default     = 1
 }
 
+variable "default_ingress_priority" {
+  description = "A default ingress priority."
+  type        = number
+  default     = 50
+}
+
 variable "ingress_with_cidr_blocks" {
   description = "List of ingress rules to create where 'cidr_blocks' is used. The valid keys contains 'cidr_blocks', 'from_port', 'to_port', 'protocol', 'description', 'priority' and 'rule'."
-  type        = list(map(string))
-  default     = []
-}
-variable "ingress_with_source_security_group_id" {
-  description = "List of ingress rules to create where `source_security_group_id` is used."
   type        = list(map(string))
   default     = []
 }
@@ -162,22 +171,17 @@ variable "ingress_with_cidr_blocks_and_ports" {
   type        = list(map(string))
   default     = []
 }
+
 variable "ingress_ports" {
   description = "The port list used on 'ingress_with_cidr_blocks_and_ports' ports rules."
   type        = list(number)
   default     = []
 }
 
-variable "ingress_cidr_blocks" {
-  description = "The IPv4 CIDR ranges list to use on ingress cidrs rules."
-  type        = list(string)
+variable "ingress_with_source_security_group_id" {
+  description = "List of ingress rules to create where `source_security_group_id` is used."
+  type        = list(map(string))
   default     = []
-}
-
-variable "default_ingress_priority" {
-  description = "A default ingress priority."
-  type        = number
-  default     = 50
 }
 
 #################
@@ -188,20 +192,27 @@ variable "egress_rules" {
   type        = list(string)
   default     = []
 }
+
+variable "egress_cidr_blocks" {
+  description = "The IPv4 CIDR ranges list to use on egress cidrs rules."
+  type        = list(string)
+  default     = []
+}
+
 variable "priority_for_egress_rules" {
   description = "A priority where 'egress_rules' is used. Default to 'default_egress_priority'."
   type        = number
   default     = 1
 }
 
-variable "egress_with_cidr_blocks" {
-  description = "List of egress rules to create where 'cidr_blocks' is used. The valid keys contains 'cidr_blocks', 'from_port', 'to_port', 'protocol', 'description' and 'priority'."
-  type        = list(map(string))
-  default     = []
+variable "default_egress_priority" {
+  description = "A default egress priority."
+  type        = number
+  default     = 50
 }
 
-variable "egress_with_source_security_group_id" {
-  description = "List of egress rules to create where 'source_security_group_id' is used."
+variable "egress_with_cidr_blocks" {
+  description = "List of egress rules to create where 'cidr_blocks' is used. The valid keys contains 'cidr_blocks', 'from_port', 'to_port', 'protocol', 'description' and 'priority'."
   type        = list(map(string))
   default     = []
 }
@@ -211,20 +222,15 @@ variable "egress_with_cidr_blocks_and_ports" {
   type        = list(map(string))
   default     = []
 }
+
 variable "egress_ports" {
   description = "The port list used on 'egress_with_cidr_blocks_and_ports' ports rules."
   type        = list(number)
   default     = []
 }
 
-variable "egress_cidr_blocks" {
-  description = "The IPv4 CIDR ranges list to use on egress cidrs rules."
-  type        = list(string)
+variable "egress_with_source_security_group_id" {
+  description = "List of egress rules to create where 'source_security_group_id' is used."
+  type        = list(map(string))
   default     = []
-}
-
-variable "default_egress_priority" {
-  description = "A default egress priority."
-  type        = number
-  default     = 50
 }
