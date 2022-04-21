@@ -19,10 +19,11 @@ Create both VPC and Security group.
 
 ```hcl
 module "vpc-security-group" {
-  source       = "terraform-alicloud-modules/network-with-security-group/alicloud"
-  create_vpc   = true
-  vpc_name     = "my-env-vpc"
-  vpc_cidr     = "10.10.0.0/16"
+  source           = "terraform-alicloud-modules/network-with-security-group/alicloud"
+  create_vpc       = true
+  use_existing_vpc = false
+  vpc_name         = "my-env-vpc"
+  vpc_cidr         = "10.10.0.0/16"
 
   availability_zones = ["cn-hangzhou-e", "cn-hangzhou-f", "cn-hangzhou-g"]
   vswitch_cidrs      = ["10.10.1.0/24", "10.10.2.0/24", "10.10.3.0/24"]
@@ -43,7 +44,7 @@ module "vpc-security-group" {
   name                  = "main-sg"
   description           = "Security group which is used as an argument in complete-sg"
   ingress_cidr_blocks   = ["10.10.0.0/16"]
-  ingress_rules         = ["https-443-tcp"]  
+  ingress_rules         = ["https-443-tcp"]
 }
 ```
 

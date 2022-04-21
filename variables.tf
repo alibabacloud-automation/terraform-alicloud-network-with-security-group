@@ -26,19 +26,19 @@ variable "skip_region_validation" {
 # VPC
 #################
 variable "create_vpc" {
-  description = "Whether to create vpc. If false, you can specify an existing vpc by setting 'vpc_id'."
+  description = "Whether to create vpc. If false, the 'use_existing_vpc' must be true, and you must specify an existing vpc by setting 'existing_vpc_id'."
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "use_existing_vpc" {
-  description = "The vpc id used to launch several vswitches. If set, the 'create_vpc' will be ignored."
+  description = "The vpc id used to launch several vswitches. If false, the 'create_vpc' must be true."
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "existing_vpc_id" {
-  description = "The vpc id used to launch several vswitches."
+  description = "The vpc id used to launch several vswitches. It will be ignored when create_vpc = true. "
   type        = string
   default     = ""
 }
