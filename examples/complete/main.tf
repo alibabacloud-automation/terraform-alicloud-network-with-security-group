@@ -5,7 +5,11 @@ data "alicloud_vpcs" "default" {
   name_regex = "default-NODELETING"
 }
 
-data "alicloud_security_groups" "default" {
+resource "alicloud_security_group" "default_1" {
+  vpc_id = data.alicloud_vpcs.default.ids.0
+}
+
+resource "alicloud_security_group" "default_2" {
   vpc_id = data.alicloud_vpcs.default.ids.0
 }
 
@@ -72,12 +76,12 @@ module "vpc_security_group" {
   ]
   ingress_with_source_security_group_id = [
     {
-      source_security_group_id = data.alicloud_security_groups.default.ids.0
+      source_security_group_id = alicloud_security_group.default_1.id
       priority                 = 1
       rule                     = "mysql-tcp"
     },
     {
-      source_security_group_id = data.alicloud_security_groups.default.ids.1
+      source_security_group_id = alicloud_security_group.default_2.id
       priority                 = 2
       from_port                = 10
       to_port                  = 10
@@ -120,12 +124,12 @@ module "vpc_security_group" {
   ]
   egress_with_source_security_group_id = [
     {
-      source_security_group_id = data.alicloud_security_groups.default.ids.0
+      source_security_group_id = alicloud_security_group.default_1.id
       priority                 = 1
       rule                     = "mysql-tcp"
     },
     {
-      source_security_group_id = data.alicloud_security_groups.default.ids.1
+      source_security_group_id = alicloud_security_group.default_2.id
       priority                 = 2
       from_port                = 10
       to_port                  = 10

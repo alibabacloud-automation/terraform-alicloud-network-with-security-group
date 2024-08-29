@@ -16,11 +16,6 @@ output "this_vpc_cidr_block" {
   value       = module.vpc_security_group.this_vpc_cidr_block
 }
 
-output "this_vpc_name" {
-  description = "The name of vpc."
-  value       = module.vpc_security_group.this_vpc_name
-}
-
 #################
 # Subnets
 #################
@@ -36,11 +31,6 @@ output "this_vswitch_tags" {
 output "this_availability_zones" {
   description = "List of availability zones in which vswitches launched."
   value       = module.vpc_security_group.this_availability_zones
-}
-
-output "this_vswitch_name" {
-  description = "List names of vswitch."
-  value       = module.vpc_security_group.this_vswitch_names
 }
 
 output "this_vswitch_cidr_block" {
