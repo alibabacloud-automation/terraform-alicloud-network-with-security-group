@@ -1,4 +1,8 @@
-## 1.3.0 (Unreleased)
+## 1.4.0 (Unreleased)
+## 1.3.0 (August 29, 2024)
+
+- examples/complete: improve the examples [GH-8](https://github.com/alibabacloud-automation/terraform-alicloud-network-with-security-group/pull/8)
+
 ## 1.2.0 (December 10, 2021)
 
 ENHANCEMENTS:
