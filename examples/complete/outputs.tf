@@ -11,11 +11,6 @@ output "this_vpc_tags" {
   value       = module.vpc_security_group.this_vpc_tags
 }
 
-output "this_vpc_cidr_block" {
-  description = "The VPC cidr block."
-  value       = module.vpc_security_group.this_vpc_cidr_block
-}
-
 #################
 # Subnets
 #################
