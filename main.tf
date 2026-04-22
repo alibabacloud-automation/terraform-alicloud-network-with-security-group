@@ -5,6 +5,7 @@ locals {
 module "vpc" {
   source = "alibaba/vpc/alicloud"
 
+  version         = "2.0.0"
   create          = local.create_vpc
   vpc_id          = var.existing_vpc_id
   vpc_name        = var.vpc_name
@@ -24,6 +25,7 @@ module "vpc" {
 module "security_group" {
   source = "alibaba/security-group/alicloud"
 
+  version = "3.0.0"
   # alicloud_security_group
   create      = var.create_security_group
   name        = var.name

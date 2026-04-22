@@ -6,11 +6,11 @@ data "alicloud_vpcs" "default" {
 }
 
 resource "alicloud_security_group" "default_1" {
-  vpc_id = data.alicloud_vpcs.default.ids.0
+  vpc_id = data.alicloud_vpcs.default.ids[0]
 }
 
 resource "alicloud_security_group" "default_2" {
-  vpc_id = data.alicloud_vpcs.default.ids.0
+  vpc_id = data.alicloud_vpcs.default.ids[0]
 }
 
 module "vpc_security_group" {
