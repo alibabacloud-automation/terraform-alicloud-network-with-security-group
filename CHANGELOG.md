@@ -1,3 +1,14 @@
+## [2.0.0](https://github.com/alibabacloud-automation/terraform-alicloud-network-with-security-group/compare/v1.3.0...v2.0.0) (2026-04-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* add provider version constraint for aliyun/alicloud
+
+### Features
+
+* add provider version constraint for aliyun/alicloud ([85605f1](https://github.com/alibabacloud-automation/terraform-alicloud-network-with-security-group/commit/85605f19a80369f4e1cd978a680d84709ae2e324))
+
 ## 1.4.0 (Unreleased)
 ## 1.3.0 (August 29, 2024)
 
